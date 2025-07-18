@@ -1,36 +1,59 @@
-function relight() {
-  document.getElementById("flame1").style.display = "block";
-  document.getElementById("flame2").style.display = "block";
-}
+const flames = document.querySelectorAll('.flamme');
+const canvas = document.getElementById('coeursCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let hearts = [];
 
 function createHeart() {
-  const heart = document.createElement("div");
-  heart.innerText = "💜";
-  heart.style.position = "absolute";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.top = "0px";
-  heart.style.fontSize = Math.random() * 20 + 20 + "px";
-  heart.style.animation = "fall 4s linear forwards";
-  document.getElementById("hearts").appendChild(heart);
-
-  setTimeout(() => heart.remove(), 4000);
+  const x = Math.random() * canvas.width;
+  const size = Math.random() * 20 + 10;
+  const speed = Math.random() * 1 + 0.5;
+  const color = Math.random() > 0.5 ? '#ff0000' : '#800080';
+  hearts.push({ x, y: -10, size, speed, color });
 }
 
-setInterval(createHeart, 300);
+function drawHearts() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hearts.forEach((h, i) => {
+    ctx.fillStyle = h.color;
+    ctx.beginPath();
+    ctx.arc(h.x, h.y, h.size / 2, 0, Math.PI * 2);
+    ctx.fill();
+    h.y += h.speed;
+    if (h.y > canvas.height) hearts.splice(i, 1);
+  });
+  requestAnimationFrame(drawHearts);
+}
 
-document.addEventListener("click", () => {
-  // Éteindre les flammes quand on clique dessus
-  document.getElementById("flame1").style.display = "none";
-  document.getElementById("flame2").style.display = "none";
-});
+setInterval(createHeart, 200);
+drawHearts();
 
-// Animation CSS ajoutée dynamiquement
-const style = document.createElement('style');
-style.innerHTML = `
-@keyframes fall {
-  to {
-    transform: translateY(100vh);
-    opacity: 0;
-  }
-}`;
-document.head.appendChild(style);
+function relight() {
+  flames.forEach(f => f.style.display = 'block');
+}
+
+// Microphone pour souffler sur les bougies
+navigator.mediaDevices.getUserMedia({ audio: true })
+  .then(stream => {
+    const context = new AudioContext();
+    const mic = context.createMediaStreamSource(stream);
+    const analyser = context.createAnalyser();
+    mic.connect(analyser);
+    analyser.fftSize = 256;
+
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    function detectBlow() {
+      analyser.getByteFrequencyData(dataArray);
+      let volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+      if (volume > 60) {
+        flames.forEach(f => f.style.display = 'none');
+      }
+      requestAnimationFrame(detectBlow);
+    }
+
+    detectBlow();
+  });
