@@ -1,163 +1,98 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #dbeafe;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
+  background-color: #a3cfe6; /* bleu pastel */
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
 }
 
-.title {
-  margin-top: 20px;
-  font-size: 2.5rem;
-  color: #1e3a8a;
-  font-weight: 700;
+.container {
+  text-align: center;
+  padding-top: 40px;
+  position: relative;
+}
+
+.message h1 {
+  font-size: 2em;
+  margin-bottom: 0.2em;
+  color: #4b0082;
 }
 
 .verse {
-  font-size: 1rem;
-  color: #374151;
-  margin-top: 5px;
+  font-style: italic;
+  color: #333;
 }
 
 .cake-container {
   position: relative;
-  margin: 40px auto;
-  width: 260px;
-  height: 240px;
+  display: inline-block;
 }
 
-.cake {
-  position: relative;
-  width: 220px;
-  height: 140px;
-  margin: 0 auto;
-  border-radius: 120px 120px 30px 30px;
-  background: #1e3a8a;
-  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.4), 0 10px 20px rgba(0,0,0,0.2);
-  overflow: visible;
-  z-index: 1;
+.cake-image {
+  width: 250px;
 }
 
-.bottom-cream {
+.photo-couple {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 30px;
-  background: #f9f0ff;
-  border-radius: 0 0 120px 120px;
-}
-
-.cake-layer {
-  position: absolute;
-  bottom: 30px;
-  width: 100%;
-  height: 50px;
-  background: #2d2d8f;
-}
-
-.top-cream {
-  position: absolute;
-  bottom: 80px;
-  width: 100%;
-  height: 20px;
-  background: #f9f0ff;
+  top: 30%;
+  left: 50%;
+  width: 80px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 .candles {
   position: absolute;
-  top: -20px;
-  width: 100%;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-around;
-  padding: 0 20px;
+  gap: 20px;
 }
 
 .candle {
+  width: 10px;
+  height: 30px;
+  background: white;
+  border-radius: 2px;
   position: relative;
-  width: 8px;
-  height: 40px;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 0 3px rgba(0,0,0,0.2);
 }
 
-.candle::after {
-  content: "";
+.flame {
+  width: 10px;
+  height: 15px;
+  background: orange;
+  border-radius: 50% 50% 0 0;
   position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 6px;
-  background: #333;
-}
-
-.candle .flame {
-  position: absolute;
-  top: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 16px;
-  background: radial-gradient(circle at 50% 0%, #ffdd55 0%, #ff7000 70%);
-  border-radius: 50% 50% 40% 40%;
-  animation: flicker 0.2s infinite alternate;
+  top: -15px;
+  left: 0;
+  animation: flicker 0.3s infinite;
 }
 
 @keyframes flicker {
-  0% { transform: translateX(-50%) scale(1); opacity: 1; }
-  100% { transform: translateX(-50%) scale(1.2); opacity: 0.7; }
-}
-
-.couple-img {
-  position: absolute;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 130px;
-  z-index: 2;
-}
-
-.hearts-container {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.heart {
-  position: absolute;
-  font-size: 20px;
-  animation: fall 5s linear infinite;
-}
-
-@keyframes fall {
-  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 button {
   margin-top: 20px;
-  padding: 8px 16px;
-  font-size: 1rem;
-  background-color: #7b2cbf;
-  color: white;
+  padding: 10px 15px;
+  font-size: 1em;
   border: none;
-  border-radius: 10px;
+  background-color: #4b0082;
+  color: white;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #5a189a;
-}
-
-.message {
-  margin-top: 10px;
-  font-size: 1rem;
-  color: #5a189a;
+.hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
