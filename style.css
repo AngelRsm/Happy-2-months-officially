@@ -25,60 +25,101 @@ h1 {
 
 .cake-area {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 270px; /* largeur légèrement plus que gâteau */
+  margin-bottom: 15px;
 }
 
 .cake {
   width: 250px;
+  display: block;
+  z-index: 1;
+  user-select: none;
 }
 
 .photo-couple {
+  width: 120px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
   position: absolute;
-  top: 30%;
+  top: 15%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #0004;
+  transform: translateX(-50%);
+  z-index: 3;
+  user-select: none;
 }
 
+/* Bougies positionnées par rapport à cake-area */
 .bougie {
   width: 10px;
-  height: 30px;
-  background-color: #fff;
+  height: 40px;
+  background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+  border-radius: 4px;
   position: absolute;
-  top: -35px;
+  top: 70px; /* position verticale ajustée sous la photo */
+  z-index: 4;
+  box-shadow: inset 0 0 5px #aaa;
 }
 
+/* Positions bougies */
 #bougie1 {
-  left: 100px;
+  left: 85px;
 }
 
 #bougie2 {
-  right: 100px;
+  right: 85px;
 }
 
+/* Flammes en forme de goutte, plus réalistes */
 .flamme {
-  width: 10px;
-  height: 10px;
-  background-color: orange;
-  border-radius: 50%;
-  animation: flicker 0.3s infinite alternate;
+  width: 14px;
+  height: 24px;
+  margin: 0 auto;
+  background: radial-gradient(circle at 50% 20%, #ffec99 0%, #ff7f27 70%, #ff3f00 100%);
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+  filter: drop-shadow(0 0 3px #ff9900);
+  animation: flicker 0.4s ease-in-out infinite alternate;
+  box-shadow:
+    0 0 8px 2px rgba(255,140,0,0.6),
+    inset 0 0 6px 2px #fff5b1;
+  transform-origin: bottom center;
 }
 
+/* Animation flammes : légère rotation pour effet plus naturel */
 @keyframes flicker {
-  0% { transform: scale(1); opacity: 0.9; }
-  100% { transform: scale(1.2); opacity: 1; }
+  0% {
+    transform: rotate(-4deg) scale(1);
+    opacity: 0.85;
+  }
+  100% {
+    transform: rotate(4deg) scale(1.15);
+    opacity: 1;
+  }
 }
 
 button {
-  margin-top: 20px;
-  padding: 10px 20px;
+  margin: 0 auto;
+  padding: 12px 25px;
   background-color: #6a5acd;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  width: fit-content;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  user-select: none;
+}
+
+button:hover {
+  background-color: #5946b2;
+  box-shadow: 0 6px 8px rgba(0,0,0,0.3);
 }
 
 canvas {
@@ -86,4 +127,5 @@ canvas {
   top: 0;
   left: 0;
   z-index: 1;
+  pointer-events: none; /* clic passe au dessous */
 }
