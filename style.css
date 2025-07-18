@@ -1,82 +1,35 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #fff0f5;
-  font-family: 'Arial', sans-serif;
-  overflow-x: hidden;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy 2 Months</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Happy 2 months anniversary my Commando 💜</h1>
+    <p class="verse">Philippians 1:3 "I thank my God every time I remember you"</p>
 
-.message {
-  text-align: center;
-  margin-top: 40px;
-  color: #8b008b;
-}
+    <div class="cake-wrapper">
+      <img src="mon-gateau.png" alt="Gâteau" class="cake" />
+      <div class="candles">
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+      </div>
+    </div>
 
-.couple-photo img {
-  display: block;
-  margin: 30px auto;
-  max-width: 300px;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
+    <button id="relight">Relighting the candles</button>
 
-.cake-container {
-  position: relative;
-  width: 300px;
-  margin: 0 auto;
-}
+    <img src="confettis.gif" alt="Confettis" class="confetti hidden" />
 
-.cake {
-  width: 100%;
-}
+    <div class="hearts" id="hearts"></div>
+  </div>
 
-.candle {
-  position: absolute;
-  top: -60px;
-  width: 12px;
-  height: 60px;
-  background: #ffcc00;
-  border-radius: 5px;
-  box-shadow: 0 -20px 10px orange;
-  animation: flicker 0.3s infinite alternate;
-}
-
-@keyframes flicker {
-  from { box-shadow: 0 -20px 10px orange; }
-  to { box-shadow: 0 -22px 12px yellow; }
-}
-
-#hearts-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.heart {
-  position: absolute;
-  font-size: 25px;
-  animation: fall 3s linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(100vh);
-    opacity: 0;
-  }
-}
-
-#confetti {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 10;
-}
+  <script src="script.js"></script>
+</body>
+</html>
