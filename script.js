@@ -44,7 +44,7 @@ function drawConfetti(confetti) {
   ctx.rotate((confetti.rotation * Math.PI) / 180);
   ctx.globalAlpha = confetti.opacity;
   ctx.fillStyle = confetti.color;
-  ctx.fillRect(-confetti.size / 2, -confetti.size / 2, confetti.size, confetti.size / 2);
+  ctx.fillRect(-confetti.size / 2, -confetti.size / 4, confetti.size, confetti.size / 2);
   ctx.restore();
   ctx.globalAlpha = 1;
 }
@@ -83,6 +83,7 @@ function relight() {
   animationActive = true;
 }
 
+// Détection du souffle via micro
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -102,10 +103,7 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
           flames.forEach(f => f.style.display = 'none');
           lastBlowTime = Date.now();
           animationActive = false;
-          // Lancer les confettis à l'extinction
-          for(let i = 0; i < 40; i++) {
-            createConfetti();
-          }
+          for(let i = 0; i < 40; i++) createConfetti();
         }
         requestAnimationFrame(detectBlow);
       }
