@@ -1,83 +1,99 @@
 const flames = document.querySelectorAll('.flame');
-const relightBtn = document.getElementById('relight');
-const confettiCanvas = document.getElementById('confetti-canvas');
+const relightBtn = document.getElementById('relightBtn');
 const heartsContainer = document.getElementById('hearts-container');
+const confettiContainer = document.getElementById('confetti-container');
 
-function extinguishFlames() {
+let confettiTimeout = null;
+let listening = true;
+
+function extinguishCandles() {
   flames.forEach(f => f.style.display = 'none');
-  launchConfetti();
+  showConfetti();
+  listening = false;
 }
 
-function relightFlames() {
+function relightCandles() {
   flames.forEach(f => f.style.display = 'block');
+  clearConfetti();
+  listening = true;
+  startListening();
 }
 
-relightBtn.addEventListener('click', relightFlames);
-
-// Microphone - plus sensible
-navigator.mediaDevices.getUserMedia({ audio: true })
-  .then(stream => {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const mic = audioCtx.createMediaStreamSource(stream);
-    const analyser = audioCtx.createAnalyser();
-    mic.connect(analyser);
-    const data = new Uint8Array(analyser.fftSize);
-
-    function listen() {
-      analyser.getByteTimeDomainData(data);
-      const volume = data.reduce((a, b) => a + Math.abs(b - 128), 0) / data.length;
-
-      if (volume > 7) extinguishFlames(); // Seuil plus sensible
-      requestAnimationFrame(listen);
-    }
-    listen();
-  });
-
-// Confetti générique (pas en gif)
-function launchConfetti() {
-  const ctx = confettiCanvas.getContext('2d');
-  const confettis = [];
-
-  for (let i = 0; i < 200; i++) {
-    confettis.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 6 + 4,
-      color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-      speed: Math.random() * 3 + 2
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-    confettis.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.fill();
-      p.y += p.speed;
-      if (p.y > window.innerHeight) p.y = 0;
-    });
-    requestAnimationFrame(draw);
-  }
-
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-  draw();
-}
-
-// Lancer des cœurs
+// Coeurs qui tombent du haut
 function createHeart() {
   const heart = document.createElement('div');
   heart.classList.add('heart');
-  if (Math.random() < 0.5) heart.classList.add('violet');
-
-  heart.style.left = `${Math.random() * 100}%`;
+  const isViolet = Math.random() < 0.5;
+  heart.classList.add(isViolet ? 'violet' : 'red');
+  heart.style.left = `${Math.random() * 100}vw`;
+  heart.style.animationDuration = `${5 + Math.random() * 3}s`;
   heartsContainer.appendChild(heart);
-
-  setTimeout(() => {
-    heart.remove();
-  }, 5000);
+  setTimeout(() => heart.remove(), 9000);
 }
 
-setInterval(createHeart, 300);
+setInterval(createHeart, 350);
+
+// Confettis qui tombent
+function showConfetti() {
+  clearConfetti();
+  for(let i = 0; i < 150; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    if(Math.random() < 0.5) confetti.classList.add('violet');
+    confetti.style.left = `${Math.random() * 100}vw`;
+    confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
+    confetti.style.top = `-10px`;
+    confettiContainer.appendChild(confetti);
+  }
+  // Nettoyer après 6 sec
+  confettiTimeout = setTimeout(clearConfetti, 6000);
+}
+
+function clearConfetti() {
+  confettiContainer.innerHTML = '';
+  if(confettiTimeout) {
+    clearTimeout(confettiTimeout);
+    confettiTimeout = null;
+  }
+}
+
+// Microphone - écoute sensible pour souffler
+function startListening() {
+  if (!listening) return;
+
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const mic = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+      mic.connect(analyser);
+      analyser.fftSize = 256;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function detectBlow() {
+        if (!listening) return;
+
+        analyser.getByteTimeDomainData(dataArray);
+        let volume = 0;
+        for(let i=0; i < dataArray.length; i++) {
+          volume += Math.abs(dataArray[i] - 128);
+        }
+        volume /= dataArray.length;
+
+        // seuil sensible à souffle normal
+        if(volume > 6) {
+          extinguishCandles();
+          return;
+        }
+        requestAnimationFrame(detectBlow);
+      }
+      detectBlow();
+    })
+    .catch(err => {
+      console.error('Erreur micro:', err);
+    });
+}
+
+relightBtn.addEventListener('click', relightCandles);
+
+startListening();
