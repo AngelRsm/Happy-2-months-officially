@@ -15,20 +15,20 @@ let animationActive = true;
 
 function createHeart() {
   const x = Math.random() * canvas.width;
-  const size = Math.random() * 24 + 16;
-  const speed = Math.random() * 1.5 + 0.8;
+  const size = Math.random() * 30 + 20;
+  const speed = Math.random() * 3 + 1.5; // Plus rapide
   const color = Math.random() > 0.5 ? '❤️' : '💜';
-  hearts.push({ x, y: -30, size, speed, color, opacity: 1, sway: Math.random() * 0.05 + 0.02, swayAngle: 0 });
+  hearts.push({ x, y: -30, size, speed, color, opacity: 1, sway: Math.random() * 0.05 + 0.03, swayAngle: 0 });
 }
 
 function createConfetti() {
   const x = Math.random() * canvas.width;
-  const y = -10;
-  const size = Math.random() * 12 + 8;
-  const speed = Math.random() * 2 + 1;
+  const y = Math.random() * -canvas.height; // dispersé verticalement en haut
+  const size = Math.random() * 14 + 10;
+  const speed = Math.random() * 4 + 3; // Plus rapide
   const colors = ['#ff0055', '#00ff55', '#ffcc00', '#00ccff', '#ff00cc'];
   const color = colors[Math.floor(Math.random() * colors.length)];
-  confettis.push({ x, y, size, speed, color, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 10, opacity: 1 });
+  confettis.push({ x, y, size, speed, color, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 12, opacity: 1 });
 }
 
 function drawHeart(heart) {
@@ -56,8 +56,8 @@ function draw() {
     drawHeart(h);
     h.y += h.speed;
     h.swayAngle += h.sway;
-    h.x += Math.sin(h.swayAngle) * 1.2;
-    h.opacity -= 0.005;
+    h.x += Math.sin(h.swayAngle) * 1.5;
+    h.opacity -= 0.008;
     if (h.y > canvas.height || h.opacity <= 0) hearts.splice(i, 1);
   });
 
@@ -65,16 +65,16 @@ function draw() {
     drawConfetti(c);
     c.y += c.speed;
     c.rotation += c.rotationSpeed;
-    c.opacity -= 0.01;
+    c.opacity -= 0.015;
     if (c.y > canvas.height || c.opacity <= 0) confettis.splice(i, 1);
   });
 
-  if(animationActive) requestAnimationFrame(draw);
+  if (animationActive) requestAnimationFrame(draw);
 }
 
 setInterval(() => {
-  if(animationActive) createHeart();
-}, 200);
+  if (animationActive) createHeart();
+}, 120);
 
 draw();
 
@@ -103,7 +103,9 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
           flames.forEach(f => f.style.display = 'none');
           lastBlowTime = Date.now();
           animationActive = false;
-          for(let i = 0; i < 40; i++) createConfetti();
+
+          // Créer plein de confettis d’un coup (plus nombreux)
+          for(let i = 0; i < 150; i++) createConfetti();
         }
         requestAnimationFrame(detectBlow);
       }
