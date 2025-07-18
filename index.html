@@ -2,23 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Birthday Cake</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2 Months Anniversary</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <img src="mon-gateau.png" alt="Gâteau" id="cake" />
-    <div class="candles">
-      <div class="flame" id="flame1"></div>
-      <div class="flame" id="flame2"></div>
-      <div class="flame" id="flame3"></div>
-    </div>
-    <button id="relight">Relighting the candles</button>
+  <div class="message-container">
+    <h1>Happy 2 months anniversary my Commando 💜</h1>
+    <p class="verse">Philippians 1:3 "I thank my God every time I remember you"</p>
   </div>
 
-  <canvas id="confetti-canvas"></canvas>
+  <div class="cake-container">
+    <img src="mon-gateau.png" alt="Gâteau" class="cake" />
+    <div class="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+    <button id="relightBtn">Relighting the candles</button>
+  </div>
+
   <div id="hearts-container"></div>
+  <div id="confetti-container"></div>
 
   <script src="script.js"></script>
 </body>
