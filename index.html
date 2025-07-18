@@ -3,161 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy 2 Months</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #add8e6;
-      overflow: hidden;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      position: relative;
-    }
-
-    h1 {
-      color: #4b0082;
-      margin-top: 20px;
-    }
-
-    .verse {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    #cake-container {
-      position: relative;
-      width: 300px;
-      margin: 0 auto;
-    }
-
-    #cake {
-      width: 100%;
-      z-index: 1;
-    }
-
-    .flame {
-      position: absolute;
-      width: 20px;
-      height: 40px;
-      z-index: 2;
-      display: none;
-    }
-
-    .flame.active {
-      display: block;
-    }
-
-    #photo {
-      width: 200px;
-      border-radius: 20px;
-      margin-top: 20px;
-    }
-
-    #relightBtn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      background-color: #6a5acd;
-      color: white;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    .heart {
-      position: absolute;
-      width: 30px;
-      animation: fall 5s linear infinite;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-100px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
-    }
-  </style>
+  <title>2 Months</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Happy 2 months my Commando 💜</h1>
-  <div class="verse">Philippians 1:3<br>“I thank my God every time I remember you.”</div>
-
-  <div id="cake-container">
-    <img src="assets/mon-gateau.png" id="cake" alt="Gâteau">
-    <!-- 5 flames -->
-    <img src="https://i.imgur.com/g7oG7nb.gif" class="flame active" id="f1" style="top: 10px; left: 50px;">
-    <img src="https://i.imgur.com/g7oG7nb.gif" class="flame active" id="f2" style="top: 10px; left: 90px;">
-    <img src="https://i.imgur.com/g7oG7nb.gif" class="flame active" id="f3" style="top: 10px; left: 130px;">
-    <img src="https://i.imgur.com/g7oG7nb.gif" class="flame active" id="f4" style="top: 10px; left: 170px;">
-    <img src="https://i.imgur.com/g7oG7nb.gif" class="flame active" id="f5" style="top: 10px; left: 210px;">
+  <div class="container">
+    <h1>Happy 2 months my Commando 💜</h1>
+    <p class="verse">Philippians 1:3 – "I thank my God every time I remember you."</p>
+    
+    <div class="cake-area">
+      <img src="mon-gateau.png" alt="Gâteau" class="cake" />
+      <img src="couple.png" alt="Nous deux" class="photo-couple" />
+      <div class="bougie" id="bougie1">
+        <div class="flamme"></div>
+      </div>
+      <div class="bougie" id="bougie2">
+        <div class="flamme"></div>
+      </div>
+    </div>
+    
+    <button onclick="relight()">Rallumer les bougies</button>
   </div>
+  
+  <canvas id="coeursCanvas"></canvas>
 
-  <img src="assets/couple.png" id="photo" alt="Nous deux" />
-
-  <button id="relightBtn">Rallumer les bougies</button>
-
-  <script>
-    const flames = document.querySelectorAll('.flame');
-    const relightBtn = document.getElementById('relightBtn');
-
-    function blowOutFlames() {
-      flames.forEach(flame => flame.classList.remove('active'));
-    }
-
-    function relightFlames() {
-      flames.forEach(flame => flame.classList.add('active'));
-    }
-
-    relightBtn.addEventListener('click', relightFlames);
-
-    // Microphone detection
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        const context = new AudioContext();
-        const mic = context.createMediaStreamSource(stream);
-        const analyser = context.createAnalyser();
-        analyser.fftSize = 256;
-        mic.connect(analyser);
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-        function detectBlow() {
-          analyser.getByteFrequencyData(dataArray);
-          const volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
-
-          if (volume > 70) {
-            blowOutFlames();
-          }
-
-          requestAnimationFrame(detectBlow);
-        }
-
-        detectBlow();
-      });
-
-    // Falling hearts
-    const heartSources = [
-      "https://i.imgur.com/btdYlDb.png", // violet
-      "https://i.imgur.com/I63ChGb.png", // rouge
-    ];
-
-    function createHeart() {
-      const heart = document.createElement('img');
-      heart.src = heartSources[Math.floor(Math.random() * heartSources.length)];
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
-      document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 6000);
-    }
-
-    setInterval(createHeart, 300);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
