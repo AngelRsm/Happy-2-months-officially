@@ -3,28 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy 2 Months!</title>
+  <title>Happy 2 Months</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="message">
+  <div class="container">
     <h1>Happy 2 months anniversary my Commando 💜</h1>
-    <p>Philippians 1:3 "I thank my God every time I remember you"</p>
+    <p class="verse">Philippians 1:3 "I thank my God every time I remember you"</p>
+
+    <div class="cake-wrapper">
+      <img src="mon-gateau.png" alt="Gâteau" class="cake" />
+      <div class="candles">
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+        <div class="candle">
+          <div class="flame"></div>
+        </div>
+      </div>
+    </div>
+
+    <button id="relight">Relighting the candles</button>
+
+    <img src="confettis.gif" alt="Confettis" class="confetti hidden" />
+
+    <div class="hearts" id="hearts"></div>
   </div>
-
-  <div class="couple-photo">
-    <img src="img/couple.png" alt="Nous deux">
-  </div>
-
-  <div class="cake-container">
-    <img src="img/mon-gateau.png" class="cake" alt="Gâteau" />
-    <div class="candle" style="left: 42%;"></div>
-    <div class="candle" style="left: 50%;"></div>
-  </div>
-
-  <div id="hearts-container"></div>
-
-  <img id="confetti" src="img/confetti.gif" alt="confettis" />
 
   <script src="script.js"></script>
 </body>
