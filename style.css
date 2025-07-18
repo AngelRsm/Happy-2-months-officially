@@ -43,17 +43,17 @@ h1 {
   background: linear-gradient(180deg, #fff 0%, #ccc 100%);
   border-radius: 4px;
   position: absolute;
-  top: 50px; /* ajusté plus haut */
+  top: 35px; /* Remonté (plus haut) */
   z-index: 4;
   box-shadow: inset 0 0 5px #aaa;
 }
 
 #bougie1 {
-  left: 85px;
+  left: 95px; /* Rapproché */
 }
 
 #bougie2 {
-  right: 85px;
+  left: 140px; /* Rapproché */
 }
 
 .flamme {
@@ -108,6 +108,6 @@ canvas {
   left: 0;
   z-index: 1;
   pointer-events: none;
-  font-size: 24px; /* pour les emojis */
+  font-size: 24px;
   user-select: none;
 }
