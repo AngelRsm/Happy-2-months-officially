@@ -1,34 +1,34 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #a3cfe6; /* bleu pastel */
-  font-family: 'Arial', sans-serif;
-  overflow-x: hidden;
+  background-color: #b3d9ff; /* bleu pastel */
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  overflow: hidden;
 }
 
 .container {
-  text-align: center;
-  padding-top: 40px;
+  padding-top: 30px;
   position: relative;
+  z-index: 2;
 }
 
-.message h1 {
-  font-size: 2em;
-  margin-bottom: 0.2em;
-  color: #4b0082;
+h1 {
+  color: #333;
 }
 
 .verse {
   font-style: italic;
-  color: #333;
+  color: #444;
+  margin-bottom: 20px;
 }
 
-.cake-container {
+.cake-area {
   position: relative;
   display: inline-block;
 }
 
-.cake-image {
+.cake {
   width: 250px;
 }
 
@@ -36,63 +36,54 @@ body {
   position: absolute;
   top: 30%;
   left: 50%;
-  width: 80px;
   transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 3px solid white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  width: 100px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #0004;
 }
 
-.candles {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 20px;
-}
-
-.candle {
+.bougie {
   width: 10px;
   height: 30px;
-  background: white;
-  border-radius: 2px;
-  position: relative;
+  background-color: #fff;
+  position: absolute;
+  top: -35px;
 }
 
-.flame {
+#bougie1 {
+  left: 100px;
+}
+
+#bougie2 {
+  right: 100px;
+}
+
+.flamme {
   width: 10px;
-  height: 15px;
-  background: orange;
-  border-radius: 50% 50% 0 0;
-  position: absolute;
-  top: -15px;
-  left: 0;
-  animation: flicker 0.3s infinite;
+  height: 10px;
+  background-color: orange;
+  border-radius: 50%;
+  animation: flicker 0.3s infinite alternate;
 }
 
 @keyframes flicker {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.2); opacity: 1; }
 }
 
 button {
   margin-top: 20px;
-  padding: 10px 15px;
-  font-size: 1em;
-  border: none;
-  background-color: #4b0082;
+  padding: 10px 20px;
+  background-color: #6a5acd;
   color: white;
-  border-radius: 8px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-.hearts {
+canvas {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  z-index: 1;
 }
