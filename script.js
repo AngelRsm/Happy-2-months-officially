@@ -10,56 +10,79 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 let hearts = [];
+let confettis = [];
+let animationActive = true;
 
 function createHeart() {
   const x = Math.random() * canvas.width;
-  const size = Math.random() * 20 + 15;
+  const size = Math.random() * 24 + 16;
   const speed = Math.random() * 1.5 + 0.8;
-  const color = Math.random() > 0.5 ? '#ff0000' : '#800080';
-  hearts.push({ x, y: -20, size, speed, color, opacity: 1, sway: Math.random() * 0.05 + 0.02, swayAngle: 0 });
+  const color = Math.random() > 0.5 ? '❤️' : '💜';
+  hearts.push({ x, y: -30, size, speed, color, opacity: 1, sway: Math.random() * 0.05 + 0.02, swayAngle: 0 });
 }
 
-// Fonction dessin cœur avec Bézier (plus doux)
-function drawHeart(x, y, size, color, opacity) {
+function createConfetti() {
+  const x = Math.random() * canvas.width;
+  const y = -10;
+  const size = Math.random() * 12 + 8;
+  const speed = Math.random() * 2 + 1;
+  const colors = ['#ff0055', '#00ff55', '#ffcc00', '#00ccff', '#ff00cc'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  confettis.push({ x, y, size, speed, color, rotation: Math.random() * 360, rotationSpeed: (Math.random() - 0.5) * 10, opacity: 1 });
+}
+
+function drawHeart(heart) {
+  ctx.font = `${heart.size}px serif`;
+  ctx.globalAlpha = heart.opacity;
+  ctx.fillText(heart.color, heart.x, heart.y);
+  ctx.globalAlpha = 1;
+}
+
+function drawConfetti(confetti) {
   ctx.save();
-  ctx.translate(x, y);
-  ctx.scale(size / 20, size / 20);
-  ctx.globalAlpha = opacity;
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.bezierCurveTo(0, -3, -5, -10, -10, -10);
-  ctx.bezierCurveTo(-20, -10, -20, 5, -20, 5);
-  ctx.bezierCurveTo(-20, 15, -10, 20, 0, 30);
-  ctx.bezierCurveTo(10, 20, 20, 15, 20, 5);
-  ctx.bezierCurveTo(20, 5, 20, -10, 10, -10);
-  ctx.bezierCurveTo(5, -10, 0, -3, 0, 0);
-  ctx.closePath();
-  ctx.fill();
+  ctx.translate(confetti.x, confetti.y);
+  ctx.rotate((confetti.rotation * Math.PI) / 180);
+  ctx.globalAlpha = confetti.opacity;
+  ctx.fillStyle = confetti.color;
+  ctx.fillRect(-confetti.size / 2, -confetti.size / 2, confetti.size, confetti.size / 2);
   ctx.restore();
+  ctx.globalAlpha = 1;
 }
 
-function drawHearts() {
+function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   hearts.forEach((h, i) => {
-    drawHeart(h.x, h.y, h.size, h.color, h.opacity);
+    drawHeart(h);
     h.y += h.speed;
     h.swayAngle += h.sway;
-    h.x += Math.sin(h.swayAngle) * 1.2; // balancement gauche-droite
+    h.x += Math.sin(h.swayAngle) * 1.2;
     h.opacity -= 0.005;
-    if (h.opacity <= 0) hearts.splice(i, 1);
+    if (h.y > canvas.height || h.opacity <= 0) hearts.splice(i, 1);
   });
-  requestAnimationFrame(drawHearts);
+
+  confettis.forEach((c, i) => {
+    drawConfetti(c);
+    c.y += c.speed;
+    c.rotation += c.rotationSpeed;
+    c.opacity -= 0.01;
+    if (c.y > canvas.height || c.opacity <= 0) confettis.splice(i, 1);
+  });
+
+  if(animationActive) requestAnimationFrame(draw);
 }
 
-setInterval(createHeart, 200);
-drawHearts();
+setInterval(() => {
+  if(animationActive) createHeart();
+}, 200);
+
+draw();
 
 function relight() {
   flames.forEach(f => f.style.display = 'block');
+  animationActive = true;
 }
 
-// Microphone pour souffler sur les bougies
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(stream => {
@@ -75,11 +98,14 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       function detectBlow() {
         analyser.getByteFrequencyData(dataArray);
         let volume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-        if (volume > 60 && Date.now() - lastBlowTime > 2000) {
+        if (volume > 60 && Date.now() - lastBlowTime > 2000 && flames[0].style.display !== 'none') {
           flames.forEach(f => f.style.display = 'none');
           lastBlowTime = Date.now();
-          // Rallumer après 5s
-          setTimeout(() => relight(), 5000);
+          animationActive = false;
+          // Lancer les confettis à l'extinction
+          for(let i = 0; i < 40; i++) {
+            createConfetti();
+          }
         }
         requestAnimationFrame(detectBlow);
       }
