@@ -1,105 +1,85 @@
 body {
-  margin: 0;
-  background-color: #b3d9ff; /* bleu pastel */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.message-container {
+  background-color: #cce7ff;
+  font-family: Arial, sans-serif;
   text-align: center;
-  margin-top: 30px;
-  color: #333;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.message-container h1 {
-  font-size: 2rem;
+h1 {
+  margin-top: 20px;
+  color: #6b3fa0;
+  font-size: 2em;
 }
 
-.message-container .verse {
+.verse {
   font-style: italic;
-  margin-top: 8px;
-  font-size: 1.1rem;
   color: #444;
+  margin-bottom: 30px;
 }
 
 .cake-container {
   position: relative;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 300px;
+  margin: 0 auto;
 }
 
 .cake {
-  width: 300px;
-}
-
-.candles {
-  position: absolute;
-  top: 20px; /* ajuste la hauteur ici */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 60px;
-  z-index: 10;
+  width: 100%;
 }
 
 .candle {
-  width: 12px;
+  width: 10px;
   height: 40px;
-  background-color: #fffacd;
-  border-radius: 3px;
-  position: relative;
-  box-shadow: 0 0 6px #ffec8b;
+  background-color: #222;
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#candle1 {
+  left: 45%;
+}
+
+#candle2 {
+  left: 55%;
 }
 
 .flame {
+  width: 10px;
+  height: 20px;
+  background-color: orange;
+  border-radius: 50% 50% 50% 50%;
   position: absolute;
   top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 20px;
-  background: radial-gradient(circle at center, orange 40%, transparent 70%);
-  border-radius: 50% 50% 0 0;
-  animation: flicker 0.3s infinite alternate;
-  box-shadow: 0 0 8px orange;
+  left: 0;
+  animation: flicker 0.2s infinite;
 }
 
 @keyframes flicker {
-  0% {
-    transform: translateX(-50%) scaleY(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) scaleY(1.3);
-    opacity: 0.8;
-  }
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-2px); }
+  100% { transform: scale(1) translateY(0); }
 }
 
-#relightBtn {
-  margin-top: 110px;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 20px;
-  background-color: #6a5acd;
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: #a864a8;
   color: white;
-  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 3px 8px rgba(106, 90, 205, 0.7);
-  transition: background-color 0.3s ease;
 }
 
-#relightBtn:hover {
-  background-color: #5942c7;
+button:hover {
+  background-color: #914d91;
 }
 
-#hearts-container {
+#confetti-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -107,73 +87,49 @@ body {
   height: 100%;
   pointer-events: none;
   overflow: hidden;
-  z-index: 5;
-}
-
-.heart {
-  position: absolute;
-  font-size: 24px;
-  user-select: none;
-  pointer-events: none;
-  animation-name: fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.heart.red {
-  color: #ff0000;
-}
-
-.heart.violet {
-  color: #800080;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-50px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh);
-    opacity: 0;
-  }
-}
-
-#confetti-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  overflow: visible;
-  z-index: 20;
+  z-index: 10;
 }
 
 .confetti {
   position: absolute;
   width: 10px;
   height: 10px;
-  background-color: red;
   opacity: 0.8;
-  border-radius: 2px;
-  animation-name: confetti-fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform;
+  border-radius: 50%;
+  animation: fall 3s linear infinite;
 }
 
-.confetti.violet {
-  background-color: violet;
-}
-
-@keyframes confetti-fall {
+@keyframes fall {
   0% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+#heart-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.heart {
+  position: absolute;
+  font-size: 24px;
+  animation: heartFall 5s linear infinite;
+}
+
+@keyframes heartFall {
+  0% {
+    transform: translateY(-50px);
     opacity: 1;
   }
   100% {
-    transform: translateY(110vh) rotate(360deg);
+    transform: translateY(100vh);
     opacity: 0;
   }
 }
