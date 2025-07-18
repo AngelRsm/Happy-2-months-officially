@@ -1,99 +1,66 @@
-const flames = document.querySelectorAll('.flame');
-const relightBtn = document.getElementById('relightBtn');
-const heartsContainer = document.getElementById('hearts-container');
-const confettiContainer = document.getElementById('confetti-container');
+const candleFlames = document.querySelectorAll(".flame");
+const relightBtn = document.getElementById("relight");
+const confettiContainer = document.getElementById("confetti-container");
+const heartContainer = document.getElementById("heart-container");
 
-let confettiTimeout = null;
-let listening = true;
+// Microphone setup
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+  const source = audioCtx.createMediaStreamSource(stream);
+  const analyser = audioCtx.createAnalyser();
+  source.connect(analyser);
+  const data = new Uint8Array(analyser.frequencyBinCount);
+
+  function detectBlow() {
+    analyser.getByteFrequencyData(data);
+    let volume = data.reduce((a, b) => a + b) / data.length;
+    if (volume > 20) { // plus sensible
+      extinguishCandles();
+      triggerConfetti();
+    }
+    requestAnimationFrame(detectBlow);
+  }
+  detectBlow();
+});
 
 function extinguishCandles() {
-  flames.forEach(f => f.style.display = 'none');
-  showConfetti();
-  listening = false;
+  candleFlames.forEach(flame => flame.style.display = "none");
 }
 
 function relightCandles() {
-  flames.forEach(f => f.style.display = 'block');
-  clearConfetti();
-  listening = true;
-  startListening();
+  candleFlames.forEach(flame => flame.style.display = "block");
+  confettiContainer.innerHTML = "";
 }
 
-// Coeurs qui tombent du haut
-function createHeart() {
-  const heart = document.createElement('div');
-  heart.classList.add('heart');
-  const isViolet = Math.random() < 0.5;
-  heart.classList.add(isViolet ? 'violet' : 'red');
-  heart.style.left = `${Math.random() * 100}vw`;
-  heart.style.animationDuration = `${5 + Math.random() * 3}s`;
-  heartsContainer.appendChild(heart);
-  setTimeout(() => heart.remove(), 9000);
-}
+relightBtn.addEventListener("click", relightCandles);
 
-setInterval(createHeart, 350);
-
-// Confettis qui tombent
-function showConfetti() {
-  clearConfetti();
-  for(let i = 0; i < 150; i++) {
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti');
-    if(Math.random() < 0.5) confetti.classList.add('violet');
-    confetti.style.left = `${Math.random() * 100}vw`;
-    confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
-    confetti.style.top = `-10px`;
+function triggerConfetti() {
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.backgroundColor = randomColor();
+    confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
     confettiContainer.appendChild(confetti);
-  }
-  // Nettoyer après 6 sec
-  confettiTimeout = setTimeout(clearConfetti, 6000);
-}
 
-function clearConfetti() {
-  confettiContainer.innerHTML = '';
-  if(confettiTimeout) {
-    clearTimeout(confettiTimeout);
-    confettiTimeout = null;
+    setTimeout(() => confetti.remove(), 4000);
   }
 }
 
-// Microphone - écoute sensible pour souffler
-function startListening() {
-  if (!listening) return;
-
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const mic = audioCtx.createMediaStreamSource(stream);
-      const analyser = audioCtx.createAnalyser();
-      mic.connect(analyser);
-      analyser.fftSize = 256;
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-      function detectBlow() {
-        if (!listening) return;
-
-        analyser.getByteTimeDomainData(dataArray);
-        let volume = 0;
-        for(let i=0; i < dataArray.length; i++) {
-          volume += Math.abs(dataArray[i] - 128);
-        }
-        volume /= dataArray.length;
-
-        // seuil sensible à souffle normal
-        if(volume > 6) {
-          extinguishCandles();
-          return;
-        }
-        requestAnimationFrame(detectBlow);
-      }
-      detectBlow();
-    })
-    .catch(err => {
-      console.error('Erreur micro:', err);
-    });
+function randomColor() {
+  const colors = ["#f54291", "#42f554", "#f5e642", "#42d4f5", "#ffffff", "#a864a8"];
+  return colors[Math.floor(Math.random() * colors.length)];
 }
 
-relightBtn.addEventListener('click', relightCandles);
+// Floating hearts
+function spawnHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.textContent = Math.random() < 0.5 ? "❤️" : "💜";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+  heartContainer.appendChild(heart);
 
-startListening();
+  setTimeout(() => heart.remove(), 5000);
+}
+setInterval(spawnHeart, 300);
