@@ -3,31 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy 2 months 💜</title>
+  <title>Happy 2 Months</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="hearts-container"></div>
+  <div class="container">
+    <div class="message">
+      <h1>Happy 2 months my Commando 💜</h1>
+      <p class="verse">Philippians 1:3 — “I thank my God every time I remember you.”</p>
+    </div>
 
-  <h1 class="title">Happy 2 months Commando 💜</h1>
-  <p class="verse">Philippians 1:3<br>“I thank my God every time I remember you.”</p>
+    <div class="cake-container">
+      <img src="gateau.png" alt="Gâteau" class="cake-image" />
+      <img src="photo-couple.png" alt="Photo" class="photo-couple" />
 
-  <div class="cake-container">
-    <div class="cake">
-      <div class="cream-layer bottom-cream"></div>
-      <div class="cake-layer"></div>
-      <div class="cream-layer top-cream"></div>
       <div class="candles">
-        <div class="candle"></div>
-        <div class="candle"></div>
-        <div class="candle"></div>
+        <div class="candle">
+          <div class="flame" id="flame1"></div>
+        </div>
+        <div class="candle">
+          <div class="flame" id="flame2"></div>
+        </div>
       </div>
     </div>
-    <img src="couple.png" alt="Couple Image" class="couple-img" />
+
+    <button onclick="relight()">Rallumer les bougies</button>
   </div>
 
-  <button onclick="relightCandles()">Rallumer les bougies 🔥</button>
-  <p class="message" id="loveMessage">Essaie de souffler doucement dans le micro... 🎤</p>
+  <div class="hearts" id="hearts"></div>
 
   <script src="script.js"></script>
 </body>
