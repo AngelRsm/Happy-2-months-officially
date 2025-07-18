@@ -1,35 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Happy 2 Months</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <h1>Happy 2 months anniversary my Commando 💜</h1>
-    <p class="verse">Philippians 1:3 "I thank my God every time I remember you"</p>
+body {
+  background-color: #b3d4fc;
+  margin: 0;
+  font-family: sans-serif;
+  overflow: hidden;
+}
 
-    <div class="cake-wrapper">
-      <img src="mon-gateau.png" alt="Gâteau" class="cake" />
-      <div class="candles">
-        <div class="candle">
-          <div class="flame"></div>
-        </div>
-        <div class="candle">
-          <div class="flame"></div>
-        </div>
-      </div>
-    </div>
+.container {
+  text-align: center;
+  padding-top: 30px;
+}
 
-    <button id="relight">Relighting the candles</button>
+h1 {
+  font-size: 2em;
+  margin-bottom: 0.3em;
+}
 
-    <img src="confettis.gif" alt="Confettis" class="confetti hidden" />
+.verse {
+  font-style: italic;
+  margin-bottom: 1.5em;
+}
 
-    <div class="hearts" id="hearts"></div>
-  </div>
+.cake-wrapper {
+  position: relative;
+  display: inline-block;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+.cake {
+  width: 250px;
+}
+
+.candles {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 40px;
+}
+
+.candle {
+  width: 10px;
+  height: 40px;
+  background-color: #fff;
+  position: relative;
+  border-radius: 3px;
+}
+
+.flame {
+  width: 10px;
+  height: 15px;
+  background: orange;
+  border-radius: 50% 50% 50% 50%;
+  position: absolute;
+  top: -15px;
+  left: 0;
+  animation: flicker 0.2s infinite alternate;
+}
+
+@keyframes flicker {
+  from {
+    transform: scale(1) translateY(0);
+  }
+  to {
+    transform: scale(1.2) translateY(-2px);
+  }
+}
+
+button {
+  margin-top: 1.5em;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  background-color: #8c52ff;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
