@@ -1,102 +1,99 @@
-// FLAMMES
-const flamme1 = document.getElementById("flamme1");
-const flamme2 = document.getElementById("flamme2");
-const relightBtn = document.getElementById("relightBtn");
+const flames = document.querySelectorAll('.flame');
+const relightBtn = document.getElementById('relightBtn');
+const heartsContainer = document.getElementById('hearts-container');
+const confettiContainer = document.getElementById('confetti-container');
 
-relightBtn.addEventListener("click", () => {
-  flamme1.style.display = "block";
-  flamme2.style.display = "block";
-});
+let confettiTimeout = null;
+let listening = true;
 
-// MICROPHONE + CONFETTIS
-navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-  const context = new AudioContext();
-  const analyser = context.createAnalyser();
-  const source = context.createMediaStreamSource(stream);
-  source.connect(analyser);
-  analyser.fftSize = 256;
-  const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-  function detectSound() {
-    analyser.getByteFrequencyData(dataArray);
-    const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-
-    if (average > 60) { // seuil de souffle
-      flamme1.style.display = "none";
-      flamme2.style.display = "none";
-      launchConfetti();
-    }
-
-    requestAnimationFrame(detectSound);
-  }
-
-  detectSound();
-});
-
-// COEURS QUI TOMBENT
-function spawnHeart() {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerText = Math.random() > 0.5 ? "❤️" : "💜";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-  document.querySelector(".hearts-container").appendChild(heart);
-
-  setTimeout(() => heart.remove(), 6000);
+function extinguishCandles() {
+  flames.forEach(f => f.style.display = 'none');
+  showConfetti();
+  listening = false;
 }
 
-setInterval(spawnHeart, 400);
+function relightCandles() {
+  flames.forEach(f => f.style.display = 'block');
+  clearConfetti();
+  listening = true;
+  startListening();
+}
 
-// CONFETTIS
-const confettiCanvas = document.getElementById('confetti-canvas');
-const ctx = confettiCanvas.getContext('2d');
-let confettis = [];
+// Coeurs qui tombent du haut
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  const isViolet = Math.random() < 0.5;
+  heart.classList.add(isViolet ? 'violet' : 'red');
+  heart.style.left = `${Math.random() * 100}vw`;
+  heart.style.animationDuration = `${5 + Math.random() * 3}s`;
+  heartsContainer.appendChild(heart);
+  setTimeout(() => heart.remove(), 9000);
+}
 
-function launchConfetti() {
-  for (let i = 0; i < 100; i++) {
-    confettis.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * -100,
-      r: Math.random() * 6 + 4,
-      d: Math.random() * 10 + 10,
-      color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-      tilt: Math.random() * 10 - 10,
-      tiltAngleIncremental: Math.random() * 0.1 + 0.05,
-      tiltAngle: 0
+setInterval(createHeart, 350);
+
+// Confettis qui tombent
+function showConfetti() {
+  clearConfetti();
+  for(let i = 0; i < 150; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    if(Math.random() < 0.5) confetti.classList.add('violet');
+    confetti.style.left = `${Math.random() * 100}vw`;
+    confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
+    confetti.style.top = `-10px`;
+    confettiContainer.appendChild(confetti);
+  }
+  // Nettoyer après 6 sec
+  confettiTimeout = setTimeout(clearConfetti, 6000);
+}
+
+function clearConfetti() {
+  confettiContainer.innerHTML = '';
+  if(confettiTimeout) {
+    clearTimeout(confettiTimeout);
+    confettiTimeout = null;
+  }
+}
+
+// Microphone - écoute sensible pour souffler
+function startListening() {
+  if (!listening) return;
+
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const mic = audioCtx.createMediaStreamSource(stream);
+      const analyser = audioCtx.createAnalyser();
+      mic.connect(analyser);
+      analyser.fftSize = 256;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function detectBlow() {
+        if (!listening) return;
+
+        analyser.getByteTimeDomainData(dataArray);
+        let volume = 0;
+        for(let i=0; i < dataArray.length; i++) {
+          volume += Math.abs(dataArray[i] - 128);
+        }
+        volume /= dataArray.length;
+
+        // seuil sensible à souffle normal
+        if(volume > 6) {
+          extinguishCandles();
+          return;
+        }
+        requestAnimationFrame(detectBlow);
+      }
+      detectBlow();
+    })
+    .catch(err => {
+      console.error('Erreur micro:', err);
     });
-  }
 }
 
-function drawConfetti() {
-  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+relightBtn.addEventListener('click', relightCandles);
 
-  confettis.forEach(c => {
-    ctx.beginPath();
-    ctx.lineWidth = c.r;
-    ctx.strokeStyle = c.color;
-    ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
-    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
-    ctx.stroke();
-  });
-
-  updateConfetti();
-  requestAnimationFrame(drawConfetti);
-}
-
-function updateConfetti() {
-  confettis.forEach(c => {
-    c.tiltAngle += c.tiltAngleIncremental;
-    c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
-    c.x += Math.sin(c.d);
-    c.tilt = Math.sin(c.tiltAngle) * 15;
-  });
-}
-
-function resizeCanvas() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-drawConfetti();
+startListening();
