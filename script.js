@@ -1,90 +1,67 @@
-const flames = [document.getElementById("flame1"), document.getElementById("flame2")];
-const confettiCanvas = document.getElementById("confetti-canvas");
-const ctx = confettiCanvas.getContext("2d");
+const candles = document.querySelectorAll(".flame");
+const canvas = document.getElementById("confetti-canvas");
+const ctx = canvas.getContext("2d");
+let confetti = [];
 
-confettiCanvas.width = window.innerWidth;
-confettiCanvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-let confetti = [], hearts = [];
-let blowing = false;
-
-function createConfetti() {
-  const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#9d4edd"];
-  for (let i = 0; i < 200; i++) {
-    confetti.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * -window.innerHeight,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      size: Math.random() * 6 + 4,
-      speed: Math.random() * 2 + 1
-    });
-  }
-}
-
-function drawConfetti() {
-  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-  confetti.forEach(c => {
-    ctx.fillStyle = c.color;
-    ctx.beginPath();
-    ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
-    ctx.fill();
-    c.y += c.speed;
-    if (c.y > window.innerHeight) c.y = 0;
-  });
-}
-
-function createHearts() {
-  const heartTypes = ["❤️", "💜"];
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.textContent = heartTypes[Math.floor(Math.random() * 2)];
-    heart.style.position = "absolute";
-    heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.top = "-30px";
-    heart.style.fontSize = Math.random() * 30 + 20 + "px";
-    heart.style.animation = "fall 5s linear forwards";
-    document.querySelector(".falling-hearts").appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 300);
-}
-
-function relightCandles() {
-  flames.forEach(f => f.style.display = "block");
-  blowing = false;
-}
-
-function extinguishCandles() {
-  flames.forEach(f => f.style.display = "none");
-  blowing = true;
-  createConfetti();
-}
-
-function loop() {
-  if (blowing) drawConfetti();
-  requestAnimationFrame(loop);
-}
-
-window.addEventListener("resize", () => {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-});
-
+// Microphone detection
 navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-  const audioContext = new AudioContext();
-  const analyser = audioContext.createAnalyser();
-  const mic = audioContext.createMediaStreamSource(stream);
+  const context = new AudioContext();
+  const mic = context.createMediaStreamSource(stream);
+  const analyser = context.createAnalyser();
   mic.connect(analyser);
-  const data = new Uint8Array(analyser.frequencyBinCount);
+  analyser.fftSize = 512;
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
   function detectBlow() {
-    analyser.getByteFrequencyData(data);
-    const volume = data.reduce((a, b) => a + b) / data.length;
-    if (volume > 25 && !blowing) extinguishCandles();
+    analyser.getByteFrequencyData(dataArray);
+    const volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+    if (volume > 40) blowCandles();
     requestAnimationFrame(detectBlow);
   }
 
   detectBlow();
 });
 
-createHearts();
-loop();
+// Blow candles
+function blowCandles() {
+  candles.forEach(f => f.style.display = "none");
+  launchConfetti();
+}
+
+// Relight candles
+function relight() {
+  candles.forEach(f => f.style.display = "block");
+  confetti = []; // clear confetti
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Confetti logic
+function launchConfetti() {
+  confetti = Array.from({ length: 100 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    r: Math.random() * 6 + 4,
+    d: Math.random() * 5 + 2,
+    color: ["#ffcc00", "#00ccff", "#ff66cc", "#ccff33", "#ff6666", "#66ffcc"][Math.floor(Math.random() * 6)],
+    tilt: Math.random() * 10 - 10
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  confetti.forEach(c => {
+    ctx.beginPath();
+    ctx.fillStyle = c.color;
+    ctx.ellipse(c.x, c.y, c.r, c.r / 2, c.tilt, 0, 2 * Math.PI);
+    ctx.fill();
+    c.y += c.d;
+    c.tilt += 0.1;
+    if (c.y > canvas.height) c.y = -10;
+  });
+  requestAnimationFrame(draw);
+}
+
+draw();
