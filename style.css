@@ -1,71 +1,96 @@
 body {
   margin: 0;
-  background: #cce7ff; /* bleu pastel */
-  font-family: 'Arial', sans-serif;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #b3d9ff; /* pastel bleu */
+  overflow: hidden;
+}
+
+#background {
   text-align: center;
-}
-
-.message {
-  margin-top: 30px;
-  color: #4b0082;
-}
-
-.cake-container {
+  padding-top: 20px;
   position: relative;
-  margin: auto;
-  margin-top: 20px;
-  width: 300px;
-  height: 300px;
+  min-height: 100vh;
+}
+
+.message h1 {
+  color: #4b0082;
+  font-size: 2em;
+  margin-bottom: 0;
+}
+
+.verse {
+  font-style: italic;
+  font-size: 1.1em;
+  margin-top: 5px;
+  color: #222;
 }
 
 .cake {
-  width: 100%;
-  height: auto;
+  position: relative;
+  display: inline-block;
+  margin-top: 30px;
+}
+
+.cake img {
+  width: 300px;
+  z-index: 1;
 }
 
 .candles {
   position: absolute;
-  top: 25%;
+  top: 40px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 60px;
+  gap: 30px;
 }
 
 .candle {
   width: 10px;
   height: 40px;
-  background: white;
+  background: #ffcc99;
   border-radius: 2px;
   position: relative;
 }
 
 .flame {
-  width: 10px;
-  height: 20px;
-  background: orange;
-  border-radius: 50% 50% 0 0;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, yellow 40%, orange 60%, red 100%);
+  border-radius: 50%;
   position: absolute;
-  top: -20px;
-  left: 0;
+  top: -14px;
+  left: -1px;
   animation: flicker 0.2s infinite;
 }
 
 @keyframes flicker {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(2deg); }
-  100% { transform: scale(1) rotate(-2deg); }
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-canvas#confetti-canvas {
+#relight {
+  margin-top: 30px;
+  padding: 10px 20px;
+  background-color: #6a5acd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  z-index: 10;
+  position: relative;
+}
+
+#confetti-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 2;
 }
 
 #hearts-container {
@@ -75,26 +100,22 @@ canvas#confetti-canvas {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 1;
 }
 
 .heart {
   position: absolute;
   font-size: 24px;
-  animation: fall 4s linear forwards;
+  animation: fall linear forwards;
 }
 
 @keyframes fall {
-  0% { top: -30px; opacity: 1; }
-  100% { top: 100vh; opacity: 0; }
-}
-
-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background: #8844dd;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 1;
+  }
 }
