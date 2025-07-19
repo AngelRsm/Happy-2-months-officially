@@ -3,7 +3,6 @@ const relightBtn = document.getElementById('relightBtn');
 const heartsContainer = document.getElementById('hearts-container');
 const confettiContainer = document.getElementById('confetti-container');
 
-let confettiTimeout = null;
 let confettiInterval = null;
 let listening = true;
 
@@ -59,10 +58,6 @@ function showConfetti() {
 
 function clearConfetti() {
   confettiContainer.innerHTML = '';
-  if (confettiTimeout) {
-    clearTimeout(confettiTimeout);
-    confettiTimeout = null;
-  }
   if (confettiInterval) {
     clearInterval(confettiInterval);
     confettiInterval = null;
