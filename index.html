@@ -1,30 +1,32 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mon Gâteau</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Happy 2 months!</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Joyeux anniversaire 🎉</h1>
-    <p class="verse">"C'est pourquoi je te le rappelle: ravive le don de Dieu que tu as reçu..."<br><em>2 Timothée 1:6</em></p>
-    
-    <div class="cake-container">
-      <img src="mon-gateau.png" alt="Gâteau" class="cake" />
-      <div class="candles">
-        <div class="candle"><div class="flame"></div></div>
-        <div class="candle"><div class="flame"></div></div>
-        <div class="candle"><div class="flame"></div></div>
+  <div class="message">
+    <h1>Happy 2 months anniversary my Commando 💜</h1>
+    <p>Philippians 1:3 - "I thank my God every time I remember you"</p>
+  </div>
+
+  <div class="cake-container">
+    <img src="mon-gateau.png" alt="Cake" class="cake">
+    <div class="candles">
+      <div class="candle">
+        <div class="flame" id="flame1"></div>
+      </div>
+      <div class="candle">
+        <div class="flame" id="flame2"></div>
       </div>
     </div>
-
-    <button id="relight">Relighting the candles</button>
-
-    <div class="confetti-container" id="confetti-container"></div>
-    <div class="hearts-container" id="hearts-container"></div>
   </div>
+
+  <canvas id="confetti-canvas"></canvas>
+  <div id="hearts-container"></div>
+
+  <button onclick="relight()">Relight the candles</button>
 
   <script src="script.js"></script>
 </body>
