@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background-color: #b3d9ff; /* bleu pastel */
+  background-color: #b3d9ff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -173,8 +173,8 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
-  z-index: 15; /* au-dessus des confettis */
-  opacity: 0;  /* caché au départ pour animation */
+  z-index: 15;
+  opacity: 0;
   transition: opacity 1.5s ease-in-out;
 }
 
@@ -196,19 +196,42 @@ body {
   filter: drop-shadow(0 0 5px rgba(0,0,0,0.15));
 }
 
-/* Position + rotation fixe pour chaque polaroid */
-.polaroid1 { transform: rotate(-8deg); }
-.polaroid2 { transform: rotate(6deg); }
-.polaroid3 { transform: rotate(-4deg); }
-.polaroid4 { transform: rotate(7deg); }
-.polaroid5 { transform: rotate(-5deg); }
-.polaroid6 { transform: rotate(4deg); }
-
-/* Optionnel : effet hover */
-.polaroid:hover {
-  transform: scale(1.1) rotate(0deg);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+/* Animations : apparition + flottement */
+@keyframes polaroidFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(var(--angle));
+  }
+  50% {
+    transform: translateY(-10px) rotate(calc(var(--angle) + 1deg));
+  }
+  100% {
+    transform: translateY(0) rotate(var(--angle));
+  }
+}
+
+.polaroids-container.visible .polaroid {
+  opacity: 0;
+  animation: polaroidFadeIn 1s ease-out forwards, float 5s ease-in-out infinite;
+}
+
+/* Délai + angle flottant par polaroid */
+.polaroid1 { --angle: -8deg; animation-delay: 0.2s; }
+.polaroid2 { --angle: 6deg;  animation-delay: 0.4s; }
+.polaroid3 { --angle: -4deg; animation-delay: 0.6s; }
+.polaroid4 { --angle: 7deg;  animation-delay: 0.8s; }
+.polaroid5 { --angle: -5deg; animation-delay: 1s; }
+.polaroid6 { --angle: 4deg;  animation-delay: 1.2s; }
 
 @keyframes confetti-fall {
   0% {
