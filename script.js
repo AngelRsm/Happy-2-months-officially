@@ -2,6 +2,7 @@ const flames = document.querySelectorAll('.flame');
 const relightBtn = document.getElementById('relightBtn');
 const heartsContainer = document.getElementById('hearts-container');
 const confettiContainer = document.getElementById('confetti-container');
+const polaroidsContainer = document.querySelector('.polaroids-container');
 
 let confettiInterval = null;
 let listening = true;
@@ -10,6 +11,7 @@ function extinguishCandles() {
   flames.forEach(f => f.style.display = 'none');
   showConfetti();
   listening = false;
+  showPolaroids();  // On affiche les polaroids au souffle
 }
 
 function relightCandles() {
@@ -17,6 +19,7 @@ function relightCandles() {
   clearConfetti();
   listening = true;
   startListening();
+  hidePolaroids();  // On cache les polaroids quand on rallume
 }
 
 // 💜❤️ Coeurs qui tombent du haut dès l'ouverture
@@ -62,6 +65,14 @@ function clearConfetti() {
     clearInterval(confettiInterval);
     confettiInterval = null;
   }
+}
+
+function showPolaroids() {
+  polaroidsContainer.classList.add('visible');
+}
+
+function hidePolaroids() {
+  polaroidsContainer.classList.remove('visible');
 }
 
 // 🎙️ Microphone - écoute le souffle
