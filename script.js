@@ -1,85 +1,90 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
+const flames = [document.getElementById("flame1"), document.getElementById("flame2")];
+const confettiCanvas = document.getElementById("confetti-canvas");
+const ctx = confettiCanvas.getContext("2d");
+
+confettiCanvas.width = window.innerWidth;
+confettiCanvas.height = window.innerHeight;
+
+let confetti = [], hearts = [];
+let blowing = false;
+
+function createConfetti() {
+  const colors = ["#f94144", "#f3722c", "#f9c74f", "#90be6d", "#577590", "#9d4edd"];
+  for (let i = 0; i < 200; i++) {
+    confetti.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * -window.innerHeight,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: Math.random() * 6 + 4,
+      speed: Math.random() * 2 + 1
+    });
+  }
 }
 
-.background {
-  background-color: #b3d9ff; /* Bleu pastel */
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
+function drawConfetti() {
+  ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confetti.forEach(c => {
+    ctx.fillStyle = c.color;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+    ctx.fill();
+    c.y += c.speed;
+    if (c.y > window.innerHeight) c.y = 0;
+  });
 }
 
-.cake-container {
-  position: relative;
-  top: 120px;
+function createHearts() {
+  const heartTypes = ["❤️", "💜"];
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.textContent = heartTypes[Math.floor(Math.random() * 2)];
+    heart.style.position = "absolute";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = "-30px";
+    heart.style.fontSize = Math.random() * 30 + 20 + "px";
+    heart.style.animation = "fall 5s linear forwards";
+    document.querySelector(".falling-hearts").appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
 }
 
-.cake {
-  width: 300px;
-  height: auto;
+function relightCandles() {
+  flames.forEach(f => f.style.display = "block");
+  blowing = false;
 }
 
-.candle {
-  width: 10px;
-  height: 30px;
-  background: white;
-  position: absolute;
-  top: 30px;
-  border-radius: 2px;
+function extinguishCandles() {
+  flames.forEach(f => f.style.display = "none");
+  blowing = true;
+  createConfetti();
 }
 
-#candle1 {
-  left: 115px;
+function loop() {
+  if (blowing) drawConfetti();
+  requestAnimationFrame(loop);
 }
 
-#candle2 {
-  right: 115px;
-}
+window.addEventListener("resize", () => {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+});
 
-.flame {
-  width: 10px;
-  height: 20px;
-  background: orange;
-  border-radius: 50% 50% 0 0;
-  position: absolute;
-  top: -20px;
-  animation: flicker 0.2s infinite;
-}
+navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+  const audioContext = new AudioContext();
+  const analyser = audioContext.createAnalyser();
+  const mic = audioContext.createMediaStreamSource(stream);
+  mic.connect(analyser);
+  const data = new Uint8Array(analyser.frequencyBinCount);
 
-@keyframes flicker {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.2) rotate(5deg); }
-  100% { transform: scale(1) rotate(-5deg); }
-}
+  function detectBlow() {
+    analyser.getByteFrequencyData(data);
+    const volume = data.reduce((a, b) => a + b) / data.length;
+    if (volume > 25 && !blowing) extinguishCandles();
+    requestAnimationFrame(detectBlow);
+  }
 
-.couple {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  width: 160px;
-  height: auto;
-}
+  detectBlow();
+});
 
-.message {
-  margin-top: 20px;
-  color: #5a0099;
-  font-size: 28px;
-}
-
-.verse {
-  color: #444;
-  font-size: 18px;
-}
-
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  pointer-events: none;
-}
+createHearts();
+loop();
