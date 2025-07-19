@@ -20,12 +20,13 @@ function relightCandles() {
   startListening();
 }
 
-// Coeurs qui tombent du haut
+// 💜❤️ Coeurs qui tombent du haut dès l'ouverture
 function createHeart() {
   const heart = document.createElement('div');
   heart.classList.add('heart');
   const isViolet = Math.random() < 0.5;
   heart.classList.add(isViolet ? 'violet' : 'red');
+  heart.textContent = isViolet ? '💜' : '❤️';
   heart.style.left = `${Math.random() * 100}vw`;
   heart.style.animationDuration = `${5 + Math.random() * 3}s`;
   heartsContainer.appendChild(heart);
@@ -36,13 +37,12 @@ setInterval(createHeart, 350);
 
 // 🎉 Confettis multicolores en continu après le souffle
 function showConfetti() {
-  clearConfetti(); // au cas où
+  clearConfetti();
 
   confettiInterval = setInterval(() => {
     const confetti = document.createElement('div');
     confetti.classList.add('confetti');
 
-    // Couleurs aléatoires multicolores
     const colors = ['red', 'violet', 'blue', 'green', 'yellow', 'orange', 'pink'];
     const color = colors[Math.floor(Math.random() * colors.length)];
     confetti.style.backgroundColor = color;
@@ -53,9 +53,8 @@ function showConfetti() {
 
     confettiContainer.appendChild(confetti);
 
-    // Supprimer après 6-8 secondes
     setTimeout(() => confetti.remove(), 8000);
-  }, 100); // crée un confetti toutes les 100ms
+  }, 100);
 }
 
 function clearConfetti() {
@@ -70,7 +69,7 @@ function clearConfetti() {
   }
 }
 
-// Microphone - écoute sensible pour souffler
+// 🎙️ Microphone - écoute le souffle
 function startListening() {
   if (!listening) return;
 
@@ -93,7 +92,6 @@ function startListening() {
         }
         volume /= dataArray.length;
 
-        // seuil sensible à souffle normal
         if (volume > 6) {
           extinguishCandles();
           return;
