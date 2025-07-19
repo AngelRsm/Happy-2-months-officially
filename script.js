@@ -4,6 +4,7 @@ const heartsContainer = document.getElementById('hearts-container');
 const confettiContainer = document.getElementById('confetti-container');
 
 let confettiTimeout = null;
+let confettiInterval = null;
 let listening = true;
 
 function extinguishCandles() {
@@ -33,27 +34,39 @@ function createHeart() {
 
 setInterval(createHeart, 350);
 
-// Confettis qui tombent
+// 🎉 Confettis multicolores en continu après le souffle
 function showConfetti() {
-  clearConfetti();
-  for(let i = 0; i < 150; i++) {
+  clearConfetti(); // au cas où
+
+  confettiInterval = setInterval(() => {
     const confetti = document.createElement('div');
     confetti.classList.add('confetti');
-    if(Math.random() < 0.5) confetti.classList.add('violet');
+
+    // Couleurs aléatoires multicolores
+    const colors = ['red', 'violet', 'blue', 'green', 'yellow', 'orange', 'pink'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.backgroundColor = color;
+
     confetti.style.left = `${Math.random() * 100}vw`;
     confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
     confetti.style.top = `-10px`;
+
     confettiContainer.appendChild(confetti);
-  }
-  // Nettoyer après 6 sec
-  confettiTimeout = setTimeout(clearConfetti, 6000);
+
+    // Supprimer après 6-8 secondes
+    setTimeout(() => confetti.remove(), 8000);
+  }, 100); // crée un confetti toutes les 100ms
 }
 
 function clearConfetti() {
   confettiContainer.innerHTML = '';
-  if(confettiTimeout) {
+  if (confettiTimeout) {
     clearTimeout(confettiTimeout);
     confettiTimeout = null;
+  }
+  if (confettiInterval) {
+    clearInterval(confettiInterval);
+    confettiInterval = null;
   }
 }
 
@@ -75,13 +88,13 @@ function startListening() {
 
         analyser.getByteTimeDomainData(dataArray);
         let volume = 0;
-        for(let i=0; i < dataArray.length; i++) {
+        for (let i = 0; i < dataArray.length; i++) {
           volume += Math.abs(dataArray[i] - 128);
         }
         volume /= dataArray.length;
 
         // seuil sensible à souffle normal
-        if(volume > 6) {
+        if (volume > 6) {
           extinguishCandles();
           return;
         }
