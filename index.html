@@ -1,22 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mon Gâteau</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2 Months Anniversary</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="hearts-container"></div>
-
-  <div class="cake-container">
-    <img src="mon-gateau.png" alt="Gâteau" class="cake-img">
-    <img src="flamme.png" class="flamme" id="flamme1">
-    <img src="flamme.png" class="flamme" id="flamme2">
+  <div class="message-container">
+    <h1>Happy 2 months anniversary my Commando 💜</h1>
+    <p class="verse">Philippians 1:3 "I thank my God every time I remember you"</p>
   </div>
 
-  <button id="relightBtn">Rallumer les bougies</button>
+  <div class="cake-container">
+    <img src="mon-gateau.png" alt="Gâteau" class="cake" />
+    <div class="candles">
+      <div class="candle"><div class="flame"></div></div>
+      <div class="candle"><div class="flame"></div></div>
+    </div>
+    <button id="relightBtn">Relighting the candles</button>
+  </div>
 
-  <canvas id="confetti-canvas"></canvas>
+  <div id="hearts-container"></div>
+  <div id="confetti-container"></div>
 
   <script src="script.js"></script>
 </body>
