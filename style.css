@@ -41,7 +41,7 @@ body {
 
 .candles {
   position: absolute;
-  top: 20px; /* ajuste la hauteur ici */
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -161,10 +161,6 @@ body {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   will-change: transform;
-}
-
-.confetti.violet {
-  background-color: violet;
 }
 
 @keyframes confetti-fall {
