@@ -1,105 +1,100 @@
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
-  overflow: hidden;
-}
-
-.container {
+  background: #cce7ff; /* bleu pastel */
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+  overflow-y: hidden;
   text-align: center;
-  padding-top: 30px;
-  position: relative;
 }
 
-h1 {
-  font-size: 2.5em;
-  color: #d6336c;
-  margin-bottom: 0.2em;
-}
-
-.verse {
-  font-size: 1.2em;
-  color: #444;
-  margin-bottom: 30px;
+.message {
+  margin-top: 30px;
+  color: #4b0082;
 }
 
 .cake-container {
   position: relative;
-  display: inline-block;
+  margin: auto;
+  margin-top: 20px;
+  width: 300px;
+  height: 300px;
 }
 
 .cake {
-  width: 300px;
+  width: 100%;
   height: auto;
-  z-index: 1;
 }
 
 .candles {
   position: absolute;
-  top: 30px;
+  top: 25%;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 20px;
-  z-index: 2;
+  gap: 60px;
 }
 
 .candle {
   width: 10px;
   height: 40px;
-  background-color: #d2691e;
+  background: white;
   border-radius: 2px;
   position: relative;
 }
 
 .flame {
   width: 10px;
-  height: 15px;
-  background: radial-gradient(ellipse at center, yellow 0%, orange 70%, red 100%);
-  border-radius: 50%;
+  height: 20px;
+  background: orange;
+  border-radius: 50% 50% 0 0;
   position: absolute;
   top: -20px;
   left: 0;
-  animation: flicker 0.2s infinite alternate;
+  animation: flicker 0.2s infinite;
 }
 
 @keyframes flicker {
   0% { transform: scale(1) rotate(0deg); }
-  100% { transform: scale(1.1) rotate(2deg); }
+  50% { transform: scale(1.1) rotate(2deg); }
+  100% { transform: scale(1) rotate(-2deg); }
 }
 
-button#relight {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1em;
-  background-color: #ff69b4;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  z-index: 3;
-  position: relative;
+canvas#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.confetti-container .confetti {
+#hearts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.heart {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  animation: fall linear forwards;
+  font-size: 24px;
+  animation: fall 4s linear forwards;
 }
 
 @keyframes fall {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0; }
+  0% { top: -30px; opacity: 1; }
+  100% { top: 100vh; opacity: 0; }
 }
 
-.hearts-container .heart {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: pink;
-  clip-path: polygon(50% 0%, 100% 35%, 82% 100%, 50% 80%, 18% 100%, 0% 35%);
-  animation: fall linear forwards;
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #8844dd;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
