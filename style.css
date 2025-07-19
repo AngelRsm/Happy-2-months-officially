@@ -1,84 +1,85 @@
-body {
+body, html {
   margin: 0;
   padding: 0;
-  background: linear-gradient(#fff0f5, #f8e1ff);
-  font-family: 'Arial', sans-serif;
-  text-align: center;
   overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-h1 {
-  margin-top: 20px;
-  font-size: 2em;
-  color: #8b008b;
-}
-
-.verse {
-  margin: 0;
-  font-style: italic;
-  color: #555;
-  margin-bottom: 20px;
+.background {
+  background-color: #b3d9ff; /* Bleu pastel */
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
 }
 
 .cake-container {
   position: relative;
-  width: 300px;
-  margin: auto;
+  top: 120px;
 }
 
 .cake {
-  width: 100%;
+  width: 300px;
+  height: auto;
 }
 
-.bougie {
+.candle {
+  width: 10px;
+  height: 30px;
+  background: white;
   position: absolute;
-  width: 30px;
-  top: -30px;
+  top: 30px;
+  border-radius: 2px;
 }
 
-#bougie1 {
-  left: 70px;
+#candle1 {
+  left: 115px;
 }
 
-#bougie2 {
-  right: 70px;
+#candle2 {
+  right: 115px;
 }
 
-button {
-  margin-top: 30px;
-  padding: 10px 20px;
-  background-color: #da70d6;
-  border: none;
-  color: white;
-  font-weight: bold;
-  border-radius: 10px;
-  cursor: pointer;
+.flame {
+  width: 10px;
+  height: 20px;
+  background: orange;
+  border-radius: 50% 50% 0 0;
+  position: absolute;
+  top: -20px;
+  animation: flicker 0.2s infinite;
 }
 
-button:hover {
-  background-color: #ba55d3;
+@keyframes flicker {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.2) rotate(5deg); }
+  100% { transform: scale(1) rotate(-5deg); }
+}
+
+.couple {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 160px;
+  height: auto;
+}
+
+.message {
+  margin-top: 20px;
+  color: #5a0099;
+  font-size: 28px;
+}
+
+.verse {
+  color: #444;
+  font-size: 18px;
 }
 
 canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
   pointer-events: none;
-}
-
-.heart {
-  position: fixed;
-  font-size: 2rem;
-  animation: fall 4s linear infinite;
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-100px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
 }
