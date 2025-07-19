@@ -11,7 +11,7 @@ function extinguishCandles() {
   flames.forEach(f => f.style.display = 'none');
   showConfetti();
   listening = false;
-  showPolaroids();  // On affiche les polaroids au souffle
+  showPolaroids();
 }
 
 function relightCandles() {
@@ -19,10 +19,9 @@ function relightCandles() {
   clearConfetti();
   listening = true;
   startListening();
-  hidePolaroids();  // On cache les polaroids quand on rallume
+  hidePolaroids();
 }
 
-// 💜❤️ Coeurs qui tombent du haut dès l'ouverture
 function createHeart() {
   const heart = document.createElement('div');
   heart.classList.add('heart');
@@ -37,10 +36,8 @@ function createHeart() {
 
 setInterval(createHeart, 350);
 
-// 🎉 Confettis multicolores en continu après le souffle
 function showConfetti() {
   clearConfetti();
-
   confettiInterval = setInterval(() => {
     const confetti = document.createElement('div');
     confetti.classList.add('confetti');
@@ -75,7 +72,6 @@ function hidePolaroids() {
   polaroidsContainer.classList.remove('visible');
 }
 
-// 🎙️ Microphone - écoute le souffle
 function startListening() {
   if (!listening) return;
 
