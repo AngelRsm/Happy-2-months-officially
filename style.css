@@ -163,6 +163,46 @@ body {
   will-change: transform;
 }
 
+/* Polaroids container */
+.polaroids-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  z-index: 15; /* au-dessus des confettis */
+}
+
+/* Polaroid images */
+.polaroid {
+  width: 140px;
+  height: 180px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border: 10px solid white;
+  border-radius: 10px;
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+/* Position + rotation fixe pour chaque polaroid */
+.polaroid1 { transform: rotate(-8deg); }
+.polaroid2 { transform: rotate(6deg); }
+.polaroid3 { transform: rotate(-4deg); }
+.polaroid4 { transform: rotate(7deg); }
+.polaroid5 { transform: rotate(-5deg); }
+.polaroid6 { transform: rotate(4deg); }
+
+/* Optionnel : effet hover */
+.polaroid:hover {
+  transform: scale(1.1) rotate(0deg);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
 @keyframes confetti-fall {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -171,109 +211,5 @@ body {
   100% {
     transform: translateY(110vh) rotate(360deg);
     opacity: 0;
-  }
-}
-
-/* ---------------------- */
-/* Polaroids container */
-
-.polaroids-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-}
-
-/* Wrapper commun */
-.polaroid-wrapper {
-  width: 220px;
-  opacity: 0;
-  animation: dropIn 0.8s ease forwards, float 4s ease-in-out infinite;
-  position: relative;
-}
-
-/* Left side */
-.polaroid-wrapper.left {
-  align-self: flex-start;
-  --angle: -4deg;
-}
-
-/* Right side */
-.polaroid-wrapper.right {
-  align-self: flex-end;
-  --angle: 5deg;
-}
-
-/* Décalages et rotations désordonnés */
-.polaroid-wrapper:nth-child(1) {
-  margin-top: 0;
-  transform: translate(0, 0) rotate(calc(var(--angle) + 1deg));
-  animation-delay: 0.2s;
-}
-
-.polaroid-wrapper:nth-child(2) {
-  margin-top: 25px;
-  transform: translate(-10px, 10px) rotate(calc(var(--angle) - 2deg));
-  animation-delay: 0.4s;
-}
-
-.polaroid-wrapper:nth-child(3) {
-  margin-top: 45px;
-  transform: translate(5px, -5px) rotate(calc(var(--angle) + 3deg));
-  animation-delay: 0.6s;
-}
-
-.polaroid-wrapper:nth-child(4) {
-  margin-top: 10px;
-  transform: translate(-5px, 5px) rotate(calc(var(--angle) + 2deg));
-  animation-delay: 0.8s;
-}
-
-.polaroid-wrapper:nth-child(5) {
-  margin-top: 35px;
-  transform: translate(10px, 10px) rotate(calc(var(--angle) - 1deg));
-  animation-delay: 1s;
-}
-
-.polaroid-wrapper:nth-child(6) {
-  margin-top: 20px;
-  transform: translate(-10px, -5px) rotate(calc(var(--angle) + 1deg));
-  animation-delay: 1.2s;
-}
-
-/* Polaroid image style */
-.polaroid {
-  width: 100%;
-  border: 10px solid white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  border-radius: 12px;
-  object-fit: cover;
-  display: block;
-  user-select: none;
-  pointer-events: none;
-}
-
-/* Animations */
-@keyframes dropIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px) rotate(calc(var(--angle) + 5deg)) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotate(var(--angle)) scale(1);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0) rotate(var(--angle));
-  }
-  50% {
-    transform: translateY(-5px) rotate(calc(var(--angle) + 1deg));
   }
 }
