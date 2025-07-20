@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background-color: #b3d9ff;
+  background-color: #b3d9ff; /* bleu pastel */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -37,7 +37,6 @@ body {
 
 .cake {
   width: 300px;
-  z-index: 10;
 }
 
 .candles {
@@ -47,7 +46,7 @@ body {
   transform: translateX(-50%);
   display: flex;
   gap: 60px;
-  z-index: 20;
+  z-index: 10;
 }
 
 .candle {
@@ -73,13 +72,18 @@ body {
 }
 
 @keyframes flicker {
-  0% { transform: translateX(-50%) scaleY(1); opacity: 1; }
-  100% { transform: translateX(-50%) scaleY(1.3); opacity: 0.8; }
+  0% {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1.3);
+    opacity: 0.8;
+  }
 }
 
 #relightBtn {
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 110px;
   padding: 12px 24px;
   border: none;
   border-radius: 20px;
@@ -89,45 +93,194 @@ body {
   cursor: pointer;
   box-shadow: 0 3px 8px rgba(106, 90, 205, 0.7);
   transition: background-color 0.3s ease;
-  z-index: 15;
 }
 
 #relightBtn:hover {
   background-color: #5942c7;
 }
 
-/* Polaroid Zones */
-.polaroids-top, .polaroids-bottom {
+#hearts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.heart {
+  position: absolute;
+  font-size: 24px;
+  user-select: none;
+  pointer-events: none;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.heart.red {
+  color: #ff0000;
+}
+
+.heart.violet {
+  color: #800080;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-50px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+#confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 20;
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  opacity: 0.8;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* === Polaroids container === */
+.polaroids-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto 0;
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin: 15px 0;
-}
-
-.polaroid {
-  width: 80px;
-  height: 100px;
-  object-fit: cover;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  border-radius: 10px;
+  justify-content: space-between; /* colonne gauche & droite */
+  height: 320px; /* hauteur pour colonnes verticales */
   opacity: 0;
-  transform: translateY(-200px);
-  animation: none;
-  transition: transform 1s ease, opacity 1s ease;
+  transition: opacity 1.5s ease-in-out;
+  pointer-events: none;
+  z-index: 15; /* au-dessus des confettis */
 }
 
-.polaroid.visible {
+.polaroids-container.visible {
   opacity: 1;
-  transform: translateY(0);
-  animation: float 4s ease-in-out infinite;
+  pointer-events: auto;
 }
 
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+/* Colonne gauche & droite */
+.polaroids-left,
+.polaroids-right {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 140px; /* largeur polaroid */
+  position: relative;
 }
 
-.hidden {
-  display: none;
+/* Polaroids style */
+.polaroid {
+  width: 140px;
+  height: 180px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border: 10px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 5px rgba(0,0,0,0.15));
+  opacity: 0;
+  animation-name: floating;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  animation-play-state: paused;
+  transition: opacity 0.5s ease, transform 0.3s ease;
+  /* Rotation variable via variable CSS */
+  --rotate: 0deg;
+  transform-origin: center;
+}
+
+/* Floating animation */
+@keyframes floating {
+  0% {
+    transform: translateY(0) rotate(var(--rotate));
+  }
+  50% {
+    transform: translateY(-10px) rotate(var(--rotate));
+  }
+  100% {
+    transform: translateY(0) rotate(var(--rotate));
+  }
+}
+
+/* On hover */
+.polaroid:hover {
+  animation-play-state: paused !important;
+  transform: scale(1.1) rotate(0deg) !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Rotation personnalisée */
+.polaroid1 { --rotate: -8deg; }
+.polaroid2 { --rotate: 6deg; }
+.polaroid3 { --rotate: -4deg; }
+.polaroid4 { --rotate: 7deg; }
+.polaroid5 { --rotate: -5deg; }
+.polaroid6 { --rotate: 4deg; }
+
+/* Apparition avec fadeInUp */
+.polaroids-container.visible .polaroid {
+  opacity: 1;
+  animation-name: fadeInUp, floating;
+  animation-duration: 0.6s, 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1, infinite;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-play-state: running;
+}
+
+/* Delay d'apparition */
+.polaroid1 { animation-delay: 0.2s; }
+.polaroid2 { animation-delay: 0.4s; }
+.polaroid3 { animation-delay: 0.6s; }
+.polaroid4 { animation-delay: 0.8s; }
+.polaroid5 { animation-delay: 1s; }
+.polaroid6 { animation-delay: 1.2s; }
+
+/* fadeInUp keyframes */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
