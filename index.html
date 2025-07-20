@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -18,21 +18,25 @@
       <div class="candle"><div class="flame"></div></div>
       <div class="candle"><div class="flame"></div></div>
     </div>
-    <div class="polaroids-top">
-      <img src="polaroid3.png" class="polaroid hidden polaroid-top" />
-      <img src="polaroid5.png" class="polaroid hidden polaroid-top" />
-      <img src="polaroid1.png" class="polaroid hidden polaroid-top" />
-    </div>
-    <button id="relightBtn">Relighting the candles 🔥</button>
-    <div class="polaroids-bottom">
-      <img src="polaroid2.png" class="polaroid hidden polaroid-bottom" />
-      <img src="polaroid6.png" class="polaroid hidden polaroid-bottom" />
-      <img src="polaroid4.png" class="polaroid hidden polaroid-bottom" />
-    </div>
+    <button id="relightBtn">Relighting the candles</button>
   </div>
 
   <div id="hearts-container"></div>
   <div id="confetti-container"></div>
+
+  <!-- Polaroids container with two columns -->
+  <div class="polaroids-container">
+    <div class="polaroids-left">
+      <img src="polaroid5.png" alt="Souvenir 5" class="polaroid polaroid5" />
+      <img src="polaroid3.png" alt="Souvenir 3" class="polaroid polaroid3" />
+      <img src="polaroid2.png" alt="Souvenir 2" class="polaroid polaroid2" />
+    </div>
+    <div class="polaroids-right">
+      <img src="polaroid1.png" alt="Souvenir 1" class="polaroid polaroid1" />
+      <img src="polaroid4.png" alt="Souvenir 4" class="polaroid polaroid4" />
+      <img src="polaroid6.png" alt="Souvenir 6" class="polaroid polaroid6" />
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
