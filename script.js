@@ -11,7 +11,7 @@ function extinguishCandles() {
   flames.forEach(f => f.style.display = 'none');
   showConfetti();
   listening = false;
-  showPolaroids();  // On affiche les polaroids au souffle
+  showPolaroids();
 }
 
 function relightCandles() {
@@ -19,10 +19,10 @@ function relightCandles() {
   clearConfetti();
   listening = true;
   startListening();
-  hidePolaroids();  // On cache les polaroids quand on rallume
+  hidePolaroids();
 }
 
-// 💜❤️ Coeurs qui tombent du haut dès l'ouverture
+// Coeurs qui tombent en continu
 function createHeart() {
   const heart = document.createElement('div');
   heart.classList.add('heart');
@@ -37,24 +37,18 @@ function createHeart() {
 
 setInterval(createHeart, 350);
 
-// 🎉 Confettis multicolores en continu après le souffle
+// Confettis
 function showConfetti() {
   clearConfetti();
-
   confettiInterval = setInterval(() => {
     const confetti = document.createElement('div');
     confetti.classList.add('confetti');
-
     const colors = ['red', 'violet', 'blue', 'green', 'yellow', 'orange', 'pink'];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.backgroundColor = color;
-
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     confetti.style.left = `${Math.random() * 100}vw`;
     confetti.style.animationDuration = `${3 + Math.random() * 2}s`;
     confetti.style.top = `-10px`;
-
     confettiContainer.appendChild(confetti);
-
     setTimeout(() => confetti.remove(), 8000);
   }, 100);
 }
@@ -67,15 +61,23 @@ function clearConfetti() {
   }
 }
 
+// Polaroid animations
 function showPolaroids() {
-  polaroidsContainer.classList.add('visible');
+  polaroidsContainer.style.opacity = '1';
+  polaroidsContainer.classList.add('heart-stage');
+  setTimeout(() => {
+    polaroidsContainer.classList.remove('heart-stage');
+    polaroidsContainer.classList.add('aligned');
+  }, 2000);
 }
 
 function hidePolaroids() {
-  polaroidsContainer.classList.remove('visible');
+  polaroidsContainer.style.opacity = '0';
+  polaroidsContainer.classList.remove('aligned');
+  polaroidsContainer.classList.remove('heart-stage');
 }
 
-// 🎙️ Microphone - écoute le souffle
+// Microphone
 function startListening() {
   if (!listening) return;
 
